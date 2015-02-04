@@ -1,5 +1,5 @@
 package MooX::Emulate::Class::Accessor::Fast;
-$MooX::Emulate::Class::Accessor::Fast::VERSION = '0.02';
+$MooX::Emulate::Class::Accessor::Fast::VERSION = '0.03';
 use Moo::Role;
 use strictures 1;
 
@@ -210,9 +210,9 @@ sub get {
 sub _make_moocaf_accessor {
   my ($class, $field, $type) = @_;
 
-  if (!$class->can('has')) {
+  if (! do { no strict 'refs'; defined &{"${class}::has"} } ) {
     require Moo;
-    my $ok = eval "package $class; Moo->import(); 1";
+    my $ok = eval "package $class; use Moo; 1";
     croak "Failed to import Moo into $class" if !$ok;
   }
 
@@ -330,6 +330,16 @@ Aran Clary Deltac <bluefeet@gmail.com>
 
 Original code, tests, and documentation taken from
 L<MooseX::Emulate::Class::Accessor::Fast>.  Thanks!
+
+=head1 CONTRIBUTORS
+
+=over
+
+=item *
+
+Graham Knop <haarg@haarg.org>
+
+=back
 
 =head1 LICENSE
 
